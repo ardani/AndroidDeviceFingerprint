@@ -13,6 +13,7 @@ public class PollingUtils {
 	public static boolean isPollingServiceExist(Context context, Class<?> cls) {
 		Intent intent = new Intent(context, cls);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
+		if (pendingIntent != null) Log.v("pendingIntent", pendingIntent.toString());
 		Log.v("FPAlarm", pendingIntent != null ? "Exist" : "Not exist");
 		return pendingIntent != null;
 	}
@@ -30,7 +31,8 @@ public class PollingUtils {
 			long triggerAtTime = SystemClock.elapsedRealtime();
 
 			// 使用AlarmManger的setRepeating方法设置定期执行的时间间隔（seconds秒）和需要执行的Service
-			manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime + 30 * 1000, seconds * 1000, pendingIntent);
+			// manager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime + 30 * 1000, seconds * 1000, pendingIntent);
+			manager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime + 30 * 1000, seconds * 1000, pendingIntent);
 		}
 		SharedPreferences prefs = context.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
 		prefs.edit().putBoolean("running", true).commit();
