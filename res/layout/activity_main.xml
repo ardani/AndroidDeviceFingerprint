@@ -1,0 +1,103 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbars="vertical"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/startBtn"
+                android:layout_width="105dp"
+                android:layout_height="match_parent"
+                android:onClick="onClickStartBtn"
+                android:text="Start" />
+
+            <Button
+                android:id="@+id/stopBtn"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:enabled="false"
+                android:onClick="onClickStopBtn"
+                android:text="Stop" />
+
+            <Button
+                android:id="@+id/refreshListBtn"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="onClickRefreshListBtn"
+                android:text="Refresh List" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Upload Time" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Data Size(Byte)" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Result" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="True" >
+
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="fill_parent"
+                android:layout_height="320dp"
+                android:scrollbarAlwaysDrawVerticalTrack="True" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="If you have any questions or get any errors while using, Please contact wangyanhao@seu.edu.cn" />
+    </LinearLayout>
+
+</ScrollView>
