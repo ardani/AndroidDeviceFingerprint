@@ -659,7 +659,7 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		if (contextParam.length != 0) {
 			Context context = contextParam[0];
 	        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-	        PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
+	        this.wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DeviceFingerprintWakeLock");
 	        wl.acquire();
 			DBManager mgr = new DBManager(context);
 			this.run(context, mgr);
