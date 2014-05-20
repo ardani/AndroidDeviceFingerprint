@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.webkit.WebView;
@@ -50,7 +51,8 @@ public class MainActivity extends Activity {
 		SharedPreferences prefs = this.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
 		prefs.edit().putString("UA", UA).commit();
 		
-		boolean flag = PollingUtils.isPollingServiceExist(this, AutoCollect.class);
+		boolean flag  = prefs.getBoolean("running", false);
+		Log.v("alarm running", "" + flag);
 		if (flag) {
 			findViewById(R.id.startBtn).setEnabled(false);
 			findViewById(R.id.stopBtn).setEnabled(true);
