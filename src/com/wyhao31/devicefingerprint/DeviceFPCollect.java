@@ -70,15 +70,15 @@ import android.view.inputmethod.InputMethodManager;
 public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 
 	private WakeLock wl = null;
-	
+
 	public DeviceFPCollect() {
 		this.wl = null;
 	}
-	
+
 	public DeviceFPCollect(WakeLock wl) {
 		this.wl = wl;
 	}
-	
+
 	private String runShellCMD(String cmdline) throws IOException {
 		Process process = Runtime.getRuntime().exec(cmdline);
 		InputStream is = process.getInputStream();
@@ -191,7 +191,7 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 
 		int commaOffset = resultBuffer.length() - 3;
 		while (commaOffset > 0) {
-			//resultBuffer.insert(commaOffset, ',');
+			// resultBuffer.insert(commaOffset, ',');
 			commaOffset -= 3;
 		}
 
@@ -205,8 +205,7 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		HashMap<String, String> idpairs = new HashMap<String, String>();
 
 		// get IMEI
-		TelephonyManager mngr = (TelephonyManager)
-		context.getSystemService(Context.TELEPHONY_SERVICE);
+		TelephonyManager mngr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 		String IMEI = mngr.getDeviceId();
 		idpairs.put("IMEI", IMEI);
 		Log.v("IMEI", IMEI);
@@ -229,17 +228,17 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		}
 		idpairs.put("Kernel_Version", kversion);
 		Log.v("Kernel version", kversion);
-		
+
 		// Android version
 		String version = Build.VERSION.RELEASE;
 		idpairs.put("Android_Ver", version);
-		Log.v("Android version", version);		
+		Log.v("Android version", version);
 
 		// Build number
 		String buildnum = Build.FINGERPRINT;
 		idpairs.put("Build_Num", buildnum);
-		Log.v("Build number", buildnum);	
-		
+		Log.v("Build number", buildnum);
+
 		// User Agent
 		SharedPreferences prefs = context.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
 		String UA = prefs.getString("UA", "");
@@ -259,7 +258,7 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		}
 		idpairs.put("WIFI_ON", "" + wifion);
 		Log.v("WIFI on", "" + wifion);
-		
+
 		String wifiMAC = "";
 		try {
 			wifiMAC = runShellCMD("cat /sys/class/net/wlan0/address");
@@ -321,10 +320,14 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		char dfarray[] = DateFormat.getDateFormatOrder(context);
 		String dateFormat = "";
 		for (int i = 0; i < dfarray.length; i++) {
-			if (i != 0) dateFormat += "-";
-			if (dfarray[i] == DateFormat.DATE) dateFormat += "dd";
-			else if (dfarray[i] == DateFormat.MONTH) dateFormat += "MM";
-			else if (dfarray[i] == DateFormat.YEAR) dateFormat += "yyyy";
+			if (i != 0)
+				dateFormat += "-";
+			if (dfarray[i] == DateFormat.DATE)
+				dateFormat += "dd";
+			else if (dfarray[i] == DateFormat.MONTH)
+				dateFormat += "MM";
+			else if (dfarray[i] == DateFormat.YEAR)
+				dateFormat += "yyyy";
 		}
 		idpairs.put("Date_Format", dateFormat);
 		Log.v("Date format", dateFormat);
@@ -334,19 +337,18 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		int autotz = Settings.System.getInt(context.getContentResolver(), Settings.System.AUTO_TIME_ZONE, -1);
 		idpairs.put("Auto_Timezone", "" + autotz);
 		Log.v("Auto timezone", "" + autotz);
-		
+
 		int screentimeout = Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, -1000) / 1000;
 		idpairs.put("Screen_Timeout", "" + screentimeout);
 		Log.v("Screen timeout", "" + screentimeout);
 
-		
 		int wifinotification = Settings.System.getInt(context.getContentResolver(), Settings.System.WIFI_NETWORKS_AVAILABLE_NOTIFICATION_ON, -1);
 		idpairs.put("WIFI_Notification", "" + wifinotification);
 		Log.v("WIFI notification", "" + wifinotification);
 		int wifisleep = Settings.System.getInt(context.getContentResolver(), Settings.System.WIFI_SLEEP_POLICY, -1);
 		idpairs.put("WIFI_Sleep", "" + wifisleep);
 		Log.v("WIFI sleep", "" + wifisleep);
-		
+
 		// access location (wifi and gps)
 		int location = 0;
 		if (Settings.Secure.isLocationProviderEnabled(context.getContentResolver(), LocationManager.GPS_PROVIDER))
@@ -355,24 +357,24 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 			location |= 2;
 		idpairs.put("Access_Loc", "" + location);
 		Log.v("Access location", "" + location);
-		
+
 		// lock pattern enable
 		int lockpattern = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCK_PATTERN_ENABLED, -1);
 		idpairs.put("LockPattern", "" + lockpattern);
 		Log.v("Lock pattern", "" + lockpattern);
-		
+
 		// lock pattern visible
 		int lockpatternVisible = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCK_PATTERN_VISIBLE, -1);
 		idpairs.put("Lock_Pattern_Visible", "" + lockpatternVisible);
 		Log.v("Lock pattern visible", "" + lockpatternVisible);
-		
+
 		// lock pattern feedback vibrate
 		int lockpatternVibrate = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED, -1);
 		idpairs.put("Lock_Pattern_Vibrate", "" + lockpatternVibrate);
 		Log.v("Lock pattern vibrate", "" + lockpatternVibrate);
-		
+
 		// input method list
-		InputMethodManager imeManager = (InputMethodManager)context.getApplicationContext().getSystemService(context.INPUT_METHOD_SERVICE);
+		InputMethodManager imeManager = (InputMethodManager) context.getApplicationContext().getSystemService(context.INPUT_METHOD_SERVICE);
 		List<InputMethodInfo> InputMethodsList = imeManager.getEnabledInputMethodList();
 		PackageManager pm = context.getPackageManager();
 		String inputMethods = "";
@@ -380,7 +382,7 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 			inputMethods += inputMethodInfo.loadLabel(pm).toString() + ",";
 		idpairs.put("Input_Methods", inputMethods);
 		Log.v("Input methods", inputMethods);
-		
+
 		// current language
 		String lan = Locale.getDefault().getDisplayLanguage();
 		idpairs.put("Language", lan);
@@ -413,19 +415,19 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 
 		// installed packages and services
 		/*
-		ActivityManager am = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
-		List<ActivityManager.RunningServiceInfo> rs = am.getRunningServices(100);
-		String installedServices = "";
-		for (int i = 0; i < rs.size(); i++) {
-			ActivityManager.RunningServiceInfo rsi = rs.get(i);
-			installedServices += rsi.process + "," + rsi.service.getClassName() + "," + rsi.uid + "##";
-			// Log.v("Service", "Process [" + rsi.process + "] With component ["
-			// + rsi.service.getClassName() + "]" + ", Uid = " + rsi.uid);
-		}
-		idpairs.put("Services", installedServices);
-		Log.v("Services", installedServices);
-		*/
-		
+		 * ActivityManager am = (ActivityManager)
+		 * context.getSystemService(context.ACTIVITY_SERVICE);
+		 * List<ActivityManager.RunningServiceInfo> rs =
+		 * am.getRunningServices(100); String installedServices = ""; for (int i
+		 * = 0; i < rs.size(); i++) { ActivityManager.RunningServiceInfo rsi =
+		 * rs.get(i); installedServices += rsi.process + "," +
+		 * rsi.service.getClassName() + "," + rsi.uid + "##"; //
+		 * Log.v("Service", "Process [" + rsi.process + "] With component [" //
+		 * + rsi.service.getClassName() + "]" + ", Uid = " + rsi.uid); }
+		 * idpairs.put("Services", installedServices); Log.v("Services",
+		 * installedServices);
+		 */
+
 		pm = context.getPackageManager();
 		// a list of installed apps.
 		List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -433,7 +435,8 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		Collections.sort(packages, new PackageComparator());
 		String installedUserPackages = "", installedSystemPackages = "";
 		for (ApplicationInfo packageInfo : packages) {
-			if (packageInfo.uid < 10000) continue;
+			if (packageInfo.uid < 10000)
+				continue;
 			if ((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
 				installedUserPackages += packageInfo.uid + ":" + packageInfo.packageName + "##";
 			else
@@ -443,7 +446,7 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 			// pm.getLaunchIntentForPackage(packageInfo.packageName));
 			// Log.v("Uid", "" + packageInfo.uid);
 		}
-		idpairs.put("User_Packages", installedUserPackages);  
+		idpairs.put("User_Packages", installedUserPackages);
 		idpairs.put("System_Packages", installedSystemPackages);
 		Log.v("User_Packages", installedUserPackages);
 		Log.v("System_Packages", installedSystemPackages);
@@ -452,14 +455,14 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		String totalInt = getTotalInternalMemorySize();
 		String availableExt = getAvailableExternalMemorySize();
 		String totalExt = getTotalExternalMemorySize();
-		
+
 		idpairs.put("Int_Storage_A", availableInt);
 		idpairs.put("Int_Storage_T", totalInt);
 		idpairs.put("Ext_Storage_A", availableExt);
 		idpairs.put("Ext_Storage_T", totalExt);
 		Log.v("Internal storage", availableInt + "/" + totalInt);
 		Log.v("External storage", availableExt + "/" + totalExt);
-		
+
 		// storage structure
 		String SS = "";
 		try {
@@ -470,10 +473,11 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		String[] strarr = SS.split("\n");
 		Arrays.sort(strarr, new StringComparator());
 		String SS1 = "";
-		for (int i = 0; i < strarr.length-1; i++) {
+		for (int i = 0; i < strarr.length - 1; i++) {
 			String[] tmp = strarr[i].split("[ ]+");
 			SS1 += tmp[0];
-			if (tmp.length > 1) SS1 += " " + tmp[1];
+			if (tmp.length > 1)
+				SS1 += " " + tmp[1];
 			SS1 += "##";
 		}
 		idpairs.put("Storage_Structure", SS1);
@@ -516,15 +520,15 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		// ringSound = ringSound.substring(ringSound.indexOf("(")+1,
 		// ringSound.indexOf(")"));
 		Log.v("Ring", ringSound);
-		
+
 		int soundEffect = Settings.System.getInt(context.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED, -1);
 		idpairs.put("Sound_Effect", "" + soundEffect);
-		Log.v("Sound effect", "" + soundEffect);	
+		Log.v("Sound effect", "" + soundEffect);
 
 		int showPwd = Settings.System.getInt(context.getContentResolver(), Settings.System.TEXT_SHOW_PASSWORD, -1);
 		idpairs.put("Show_Pwd", "" + showPwd);
 		Log.v("Show Pwd", "" + showPwd);
-		
+
 		int autobright = Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, -1);
 		idpairs.put("Auto_Bright", "" + autobright);
 		Log.v("Auto bright", "" + autobright);
@@ -532,7 +536,7 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		int autorotate = Settings.System.getInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, -1);
 		idpairs.put("Auto_Rotate", "" + autorotate);
 		Log.v("Auto rotate", "" + autorotate);
-		
+
 		// all wallpaper and current user chosen wallpaper
 		WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -543,20 +547,22 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		long hashKey = md5Hash.getValue();
 		idpairs.put("Wallpaper_md5", "" + hashKey);
 		Log.v("Wallpaper md5", "" + hashKey);
-		
+
 		return idpairs;
 	}
-	
-	
+
 	private class PackageComparator implements Comparator<ApplicationInfo> {
 
 		@Override
 		public int compare(ApplicationInfo arg0, ApplicationInfo arg1) {
-			if (arg0.uid < arg1.uid) return -1;
-			else if (arg0.uid == arg1.uid) return 0;
-			else return 1;
+			if (arg0.uid < arg1.uid)
+				return -1;
+			else if (arg0.uid == arg1.uid)
+				return 0;
+			else
+				return 1;
 		}
-		
+
 	}
 
 	private class StringComparator implements Comparator<String> {
@@ -565,8 +571,9 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		public int compare(String arg0, String arg1) {
 			return arg0.compareTo(arg1);
 		}
-		
-	}	
+
+	}
+
 	public Bitmap drawableToBitmap(Drawable drawable) {
 		if (drawable instanceof BitmapDrawable) {
 			return ((BitmapDrawable) drawable).getBitmap();
@@ -658,12 +665,12 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		// TODO Auto-generated method stub
 		if (contextParam.length != 0) {
 			Context context = contextParam[0];
-	        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-	        this.wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DeviceFingerprintWakeLock");
-	        wl.acquire();
+			PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+			this.wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DeviceFingerprintWakeLock");
+			wl.acquire();
 			DBManager mgr = new DBManager(context);
 			this.run(context, mgr);
-			//this.collectFP(context);
+			// this.collectFP(context);
 		}
 		Log.v("FPAlarm", "Async task done");
 		if (this.wl != null) {
