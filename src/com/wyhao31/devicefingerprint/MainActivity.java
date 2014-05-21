@@ -25,15 +25,15 @@ public class MainActivity extends Activity {
 	private int displayItems;
 
 	public void onClickStartBtn(View v) {
-		//startService(new Intent(this, DeviceFPService.class));
-		PollingUtils.startPollingService(this, 3 * 60 * 60, AutoCollect.class);
+		startService(new Intent(this, DeviceFPService.class));
+		// PollingUtils.startPollingService(this, 3 * 60 * 60, AutoCollect.class);
 		findViewById(R.id.startBtn).setEnabled(false);
 		findViewById(R.id.stopBtn).setEnabled(true);
 	}
 
 	public void onClickStopBtn(View v) {
-		//stopService(new Intent(this, DeviceFPService.class));
-		PollingUtils.stopPollingService(this, AutoCollect.class);
+		stopService(new Intent(this, DeviceFPService.class));
+		// PollingUtils.stopPollingService(this, AutoCollect.class);
 		findViewById(R.id.startBtn).setEnabled(true);
 		findViewById(R.id.stopBtn).setEnabled(false);
 	}
@@ -98,6 +98,16 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		SharedPreferences prefs = this.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
+		boolean flag = prefs.getBoolean("running", false);
+		Log.v("alarm running", "" + flag);
+		if (flag) {
+			findViewById(R.id.startBtn).setEnabled(false);
+			findViewById(R.id.stopBtn).setEnabled(true);
+		} else {
+			findViewById(R.id.startBtn).setEnabled(true);
+			findViewById(R.id.stopBtn).setEnabled(false);
+		}
 		refreshList();
 	}
 }
