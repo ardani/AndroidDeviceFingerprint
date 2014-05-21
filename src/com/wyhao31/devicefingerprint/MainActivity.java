@@ -98,5 +98,15 @@ public class MainActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		refreshList();
+		SharedPreferences prefs = this.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
+		boolean flag  = prefs.getBoolean("running", false);
+		Log.v("alarm running", "" + flag);
+		if (flag) {
+			findViewById(R.id.startBtn).setEnabled(false);
+			findViewById(R.id.stopBtn).setEnabled(true);
+		} else {
+			findViewById(R.id.startBtn).setEnabled(true);
+			findViewById(R.id.stopBtn).setEnabled(false);
+		}
 	}
 }
