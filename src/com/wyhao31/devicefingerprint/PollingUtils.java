@@ -13,8 +13,10 @@ public class PollingUtils {
 	public static boolean isPollingServiceExist(Context context, Class<?> cls) {
 		Intent intent = new Intent(context, cls);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
+		/*
 		if (pendingIntent != null)
 			Log.v("pendingIntent", pendingIntent.toString());
+		*/
 		Log.v("FPAlarm", pendingIntent != null ? "Exist" : "Not exist");
 		return pendingIntent != null;
 	}

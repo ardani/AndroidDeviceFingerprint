@@ -52,7 +52,8 @@ public class MainActivity extends Activity {
 		SharedPreferences prefs = this.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
 		prefs.edit().putString("UA", UA).commit();
 
-		boolean flag = prefs.getBoolean("running", false);
+		//boolean flag = prefs.getBoolean("running", false);
+		boolean flag = PollingUtils.isPollingServiceExist(this, AutoCollect.class);
 		Log.v("alarm running", "" + flag);
 		if (flag) {
 			findViewById(R.id.startBtn).setEnabled(false);
@@ -99,7 +100,8 @@ public class MainActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		SharedPreferences prefs = this.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
-		boolean flag = prefs.getBoolean("running", false);
+		//boolean flag = prefs.getBoolean("running", false);
+		boolean flag = PollingUtils.isPollingServiceExist(this, AutoCollect.class);
 		Log.v("alarm running", "" + flag);
 		if (flag) {
 			findViewById(R.id.startBtn).setEnabled(false);
