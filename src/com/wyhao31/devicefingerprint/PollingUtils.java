@@ -46,7 +46,7 @@ public class PollingUtils {
 	public static void stopPollingService(Context context, Class<?> cls) {
 		AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(context, cls);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_NO_CREATE);
 		// 取消正在执行的服务
 		manager.cancel(pendingIntent);
 		SharedPreferences prefs = context.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);

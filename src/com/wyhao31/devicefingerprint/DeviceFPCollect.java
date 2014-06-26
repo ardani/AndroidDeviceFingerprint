@@ -70,7 +70,9 @@ import android.view.inputmethod.InputMethodManager;
 public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 
 	private WakeLock wl = null;
-
+	private static String uploadURL1 = "http://wyhao.org/android/collectfp.php";
+	private static String uploadURL2 = "http://58.192.114.252/android/collectfp.php";
+	
 	public DeviceFPCollect() {
 		this.wl = null;
 	}
@@ -595,12 +597,16 @@ public class DeviceFPCollect extends AsyncTask<Context, Void, Void> {
 		int count = 0;
 		HashMap<String, String> idpairs = collectFP(context);
 		JSONObject holder = new JSONObject(idpairs);
-		while (!flag && count < 3) {
+
+		String URL;
+		while (!flag && count < 4) {
 			String time = sdf.format(new Date());
 			try {
 				// Create a new HttpClient and Post Header
 				HttpClient httpclient = new DefaultHttpClient();
-				HttpPost httppost = new HttpPost("http://wyhao.org/android/collectfp.php");
+				if (count < 2) URL = uploadURL1;
+				else URL = uploadURL2;
+				HttpPost httppost = new HttpPost(URL);
 				HttpParams httpParams = httppost.getParams();
 				HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_CONNECTION);
 				HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_SOCKET);

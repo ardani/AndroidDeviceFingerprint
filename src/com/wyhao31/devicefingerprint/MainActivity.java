@@ -25,14 +25,14 @@ public class MainActivity extends Activity {
 	private int displayItems;
 
 	public void onClickStartBtn(View v) {
-		startService(new Intent(this, DeviceFPService.class));
+		startService(new Intent(this.getApplicationContext(), DeviceFPService.class));
 		// PollingUtils.startPollingService(this, 3 * 60 * 60, AutoCollect.class);
 		findViewById(R.id.startBtn).setEnabled(false);
 		findViewById(R.id.stopBtn).setEnabled(true);
 	}
 
 	public void onClickStopBtn(View v) {
-		stopService(new Intent(this, DeviceFPService.class));
+		stopService(new Intent(this.getApplicationContext(), DeviceFPService.class));
 		// PollingUtils.stopPollingService(this, AutoCollect.class);
 		findViewById(R.id.startBtn).setEnabled(true);
 		findViewById(R.id.stopBtn).setEnabled(false);
@@ -46,15 +46,14 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// collectFP();
+		
 		WebView wv = new WebView(this);
 		String UA = wv.getSettings().getUserAgentString();
 		SharedPreferences prefs = this.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
 		prefs.edit().putString("UA", UA).commit();
 
-		//boolean flag = prefs.getBoolean("running", false);
-		boolean flag = PollingUtils.isPollingServiceExist(this, AutoCollect.class);
-		Log.v("alarm running", "" + flag);
+		boolean flag = PollingUtils.isPollingServiceExist(this, AutoCollect.class) && prefs.getBoolean("running", false);
+		Log.v("MainActivity_onCreate", "Alarm running state: " + flag);
 		if (flag) {
 			findViewById(R.id.startBtn).setEnabled(false);
 			findViewById(R.id.stopBtn).setEnabled(true);
@@ -65,6 +64,7 @@ public class MainActivity extends Activity {
 		this.displayItems = 0;
 		mgr = new DBManager(this);
 		refreshList();
+		mgr.closeDB();
 	}
 
 	public void refreshList() {
@@ -100,9 +100,8 @@ public class MainActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		SharedPreferences prefs = this.getSharedPreferences("com.wyhao31.devicefingerprint", Context.MODE_PRIVATE);
-		//boolean flag = prefs.getBoolean("running", false);
-		boolean flag = PollingUtils.isPollingServiceExist(this, AutoCollect.class);
-		Log.v("alarm running", "" + flag);
+		boolean flag = PollingUtils.isPollingServiceExist(this, AutoCollect.class) && prefs.getBoolean("running", false);
+		Log.v("MainActivity_onResume", "Alarm running state: " + flag);
 		if (flag) {
 			findViewById(R.id.startBtn).setEnabled(false);
 			findViewById(R.id.stopBtn).setEnabled(true);
@@ -110,6 +109,8 @@ public class MainActivity extends Activity {
 			findViewById(R.id.startBtn).setEnabled(true);
 			findViewById(R.id.stopBtn).setEnabled(false);
 		}
+		mgr = new DBManager(this);
 		refreshList();
+		mgr.closeDB();
 	}
 }

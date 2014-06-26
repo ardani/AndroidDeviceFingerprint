@@ -9,7 +9,7 @@ public class AutoCollect extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.v("FPAlarm", "Collect");
+		Log.v("AutoCollect", "Receive broadcast and start asynctask");
 		new DeviceFPCollect().execute(context);
 	}
 }
