@@ -71,6 +71,7 @@ public class MainActivity extends Activity {
 		ListView listView = (ListView) this.findViewById(R.id.listView);
 
 		// 获取到集合数据
+		mgr = new DBManager(this);
 		int size = mgr.queryCount();
 		List<updatehistoryItem> updatehistories = mgr.query(this.displayItems, 30);
 		List<HashMap<String, Object>> data = new ArrayList<HashMap<String, Object>>();
@@ -87,6 +88,7 @@ public class MainActivity extends Activity {
 				R.id.result });
 		// 实现列表的显示
 		listView.setAdapter(adapter);
+		mgr.closeDB();
 	}
 
 	@Override
